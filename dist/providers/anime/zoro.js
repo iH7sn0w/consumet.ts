@@ -165,11 +165,12 @@ class Zoro extends models_1.AnimeParser {
                 throw new Error('Invalid episode id');
             // Fallback to using sub if no info found in case of compatibility
             // TODO: add both options later
-            //const subOrDub = ((_a = episodeId.split('$')) === null || _a === void 0 ? void 0 : _a.pop()) === 'dub' ? 'dub' : 'sub';
-            const subOrDub: 'sub' | 'dub' | 'both' = episodeId.split('$')?.pop() === 'dub' || episodeId.split('$')?.pop() === 'both' ? episodeId.split('$')?.pop() : 'both';
+            const subOrDub = ((_a = episodeId.split('$')) === null || _a === void 0 ? void 0 : _a.pop()) === 'dub' ? 'dub' : 'sub';
+            //const subOrDub: 'sub' | 'dub' | 'both' = episodeId.split('$')?.pop() === 'dub' || episodeId.split('$')?.pop() === 'both' ? episodeId.split('$')?.pop() : 'both';
+            //.replace(/\$auto|\$sub|\$dub|\$both/gi, '')}`;
             episodeId = `${this.baseUrl}/watch/${episodeId
                 .replace('$episode$', '?ep=')
-                .replace(/\$auto|\$sub|\$dub|\$both/gi, '')}`;
+                .replace(/\$auto|\$sub|\$dub/gi, '')}`;
             try {
                 const { data } = await this.client.get(`${this.baseUrl}/ajax/v2/episode/servers?episodeId=${episodeId.split('?ep=')[1]}`);
                 const $ = (0, cheerio_1.load)(data.html);
