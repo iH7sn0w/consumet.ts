@@ -216,16 +216,12 @@ class Zoro extends models_1.AnimeParser {
                 throw err;
             }
         };
-        this.retrieveServerId = ($, index, subOrDub) => {
-  const rtr_sv_id = $(`div.ps_-block.ps_-block-sub.servers-${subOrDub} > div.ps__-list > div`)
-    .map((i, el) => {
-      const $el = $(el);
-      return $el.attr('data-server-id') === `${index}` ? $el.attr('data-id') : null;
-    })
-    .get()[0];
-
-  return rtr_sv_id;
-};
+      this.retrieveServerId = ($, index, subOrDub) => {
+            return $(`div.ps_-block.ps_-block-sub.servers-${subOrDub} > div.ps__-list > div`)
+                .map((i, el) => ($(el).attr('data-server-id') == `${index}` ? $(el) : null))
+                .get()[0]
+                .attr('data-id');
+        };
 
         /**
          * @param page Page number
