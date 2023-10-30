@@ -165,10 +165,11 @@ class Zoro extends models_1.AnimeParser {
                 throw new Error('Invalid episode id');
             // Fallback to using sub if no info found in case of compatibility
             // TODO: add both options later
-            const subOrDub = ((_a = episodeId.split('$')) === null || _a === void 0 ? void 0 : _a.pop()) === 'dub' ? 'dub' : 'sub';
+            //const subOrDub = ((_a = episodeId.split('$')) === null || _a === void 0 ? void 0 : _a.pop()) === 'dub' ? 'dub' : 'sub';
+            const subOrDub: 'sub' | 'dub' | 'both' = episodeId.split('$')?.pop() === 'dub' || episodeId.split('$')?.pop() === 'both' ? episodeId.split('$')?.pop() : 'both';
             episodeId = `${this.baseUrl}/watch/${episodeId
                 .replace('$episode$', '?ep=')
-                .replace(/\$auto|\$sub|\$dub/gi, '')}`;
+                .replace(/\$auto|\$sub|\$dub|\$both/gi, '')}`;
             try {
                 const { data } = await this.client.get(`${this.baseUrl}/ajax/v2/episode/servers?episodeId=${episodeId.split('?ep=')[1]}`);
                 const $ = (0, cheerio_1.load)(data.html);
@@ -182,7 +183,7 @@ class Zoro extends models_1.AnimeParser {
                 try {
                     switch (server) {
                         case models_1.StreamingServers.VidCloud:
-                            return serverId = this.retrieveServerId($, 1, subOrDub);
+                            serverId = this.retrieveServerId($, 1, subOrDub);
                             // zoro's vidcloud server is rapidcloud
                             if (!serverId)
                                 throw new Error('RapidCloud not found');
@@ -216,10 +217,11 @@ class Zoro extends models_1.AnimeParser {
             }
         };
         this.retrieveServerId = ($, index, subOrDub) => {
-            return $(`div.ps_-block.ps_-block-sub.servers-${subOrDub} > div.ps__-list > div`)
+               const rtr_sv_id = $(`div.ps_-block.ps_-block-sub.servers-${subOrDub} > div.ps__-list > div`)
                 .map((i, el) => ($(el).attr('data-server-id') == `${index}` ? $(el) : null))
                 .get()[0]
                 .attr('data-id');
+          return rtr_sv_id;
         };
         /**
          * @param page Page number
