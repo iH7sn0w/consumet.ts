@@ -182,7 +182,7 @@ class Zoro extends models_1.AnimeParser {
                 try {
                     switch (server) {
                         case models_1.StreamingServers.VidCloud:
-                            return serverId = this.retrieveServerId($, 1, subOrDub);
+                            serverId = this.retrieveServerId($, 1, subOrDub);
                             // zoro's vidcloud server is rapidcloud
                             if (!serverId)
                                 throw new Error('RapidCloud not found');
