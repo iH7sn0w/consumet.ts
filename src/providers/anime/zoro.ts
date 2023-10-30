@@ -213,11 +213,12 @@ class Zoro extends AnimeParser {
     // Fallback to using sub if no info found in case of compatibility
 
     // TODO: add both options later
-    const subOrDub: 'sub' | 'dub' = episodeId.split('$')?.pop() === 'dub' ? 'dub' : 'sub';
-
+    //const subOrDub: 'sub' | 'dub' | 'both' = episodeId.split('$')?.pop() === 'dub' ? 'dub' : 'sub';
+    const subOrDub: 'sub' | 'dub' | 'both' = episodeId.split('$')?.pop() === 'dub' || episodeId.split('$')?.pop() === 'both' ? episodeId.split('$')?.pop() : 'both';
+  return subOrDub;
     episodeId = `${this.baseUrl}/watch/${episodeId
       .replace('$episode$', '?ep=')
-      .replace(/\$auto|\$sub|\$dub/gi, '')}`;
+      .replace(/\$auto|\$sub|\$dub|\$both/gi, '')}`;
 
     try {
       const { data } = await this.client.get(
